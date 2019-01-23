@@ -28,6 +28,9 @@ package java.util;
 import java.io.*;
 
 /**
+ * 哈希表实现了Map接口，并且允许空key和空value。HashMap 约等于HashTable，
+ * 只不过它不是线程安全的并且它允许空值。HashMap不能保证元素的顺序，实际上，
+ * 它甚至不能保证顺序持久不变。
  * Hash table based implementation of the <tt>Map</tt> interface.  This
  * implementation provides all of the optional map operations, and permits
  * <tt>null</tt> values and the <tt>null</tt> key.  (The <tt>HashMap</tt>
@@ -36,6 +39,8 @@ import java.io.*;
  * the order of the map; in particular, it does not guarantee that the order
  * will remain constant over time.
  * <p>
+ * 你可以在常数时间内访问到HashMap的元素，而遍历操作的时间跟(桶的数目和每个桶
+ * 的大小）成正比，因此，如果你对遍历的要求比较高，你要合理的设置容纳数目和容纳率
  * <p>This implementation provides constant-time performance for the basic
  * operations (<tt>get</tt> and <tt>put</tt>), assuming the hash function
  * disperses the elements properly among the buckets.  Iteration over
@@ -45,6 +50,9 @@ import java.io.*;
  * capacity too high (or the load factor too low) if iteration performance is
  * important.
  * <p>
+ * 影响HashMap性能的两个参数：容量和负载因子。容量指的是HashMap里面桶的数量，
+ * 负载因子反映哈希表有多满。当元素的数量超过（容量*负载率）的时候，哈希表就会
+ * 被重新构建，容量大约是原来的两倍。
  * <p>An instance of <tt>HashMap</tt> has two parameters that affect its
  * performance: <i>initial capacity</i> and <i>load factor</i>.  The
  * <i>capacity</i> is the number of buckets in the hash table, and the initial
@@ -56,6 +64,10 @@ import java.io.*;
  * structures are rebuilt) so that the hash table has approximately twice the
  * number of buckets.
  * <p>
+ * 总的来说，默认负载因子（0.75）很好的在时间和空间消耗中做了取舍，这个参数越大，
+ * 则空间消耗更小但是查询的时间会加大（具体反映在put和get方法）。设置初始容量的
+ * 时候和重新哈希操作（减小的）都要考虑到负载率和期望的元素数量。如果初始容量大于
+ * 元素个数除以负载率，是不会发生重新哈希操作的。
  * <p>As a general rule, the default load factor (.75) offers a good tradeoff
  * between time and space costs.  Higher values decrease the space overhead
  * but increase the lookup cost (reflected in most of the operations of the
@@ -66,11 +78,17 @@ import java.io.*;
  * than the maximum number of entries divided by the load factor, no
  * rehash operations will ever occur.
  * <p>
+ * 如果你明知道要存放很多的元素到HashMap实体上，那么一开始就设置一个合适的
+ * 容量吧，这样比让它重新哈希而自动增长要好。
  * <p>If many mappings are to be stored in a <tt>HashMap</tt> instance,
  * creating it with a sufficiently large capacity will allow the mappings to
  * be stored more efficiently than letting it perform automatic rehashing as
  * needed to grow the table.
  * <p>
+ * 注意：HashMap不是线程安全的。如果多个线程同时使用一个HashMap实体，而其中
+ * 一个线程要对它进行结构性的修改，那它需要做额外的同步工作。（结构性的修改
+ * 是指增加或者删除元素，而不仅仅是更改元素的值）同步的操作通常被封装在一些
+ * 对象中
  * <p><strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access a hash map concurrently, and at least one of
  * the threads modifies the map structurally, it <i>must</i> be
@@ -80,12 +98,20 @@ import java.io.*;
  * structural modification.)  This is typically accomplished by
  * synchronizing on some object that naturally encapsulates the map.
  * <p>
+ * 如果没有这样的对象，那最好在初始化的时候对map进行同步化，具体方法是
+ * 利用Collections.synchronizedMap(hashMap);最好如下例所示，在创建的时候
+ * 就预防非同步的发生
  * If no such object exists, the map should be "wrapped" using the
  * {@link Collections#synchronizedMap Collections.synchronizedMap}
  * method.  This is best done at creation time, to prevent accidental
  * unsynchronized access to the map:<pre>
  *   Map m = Collections.synchronizedMap(new HashMap(...));</pre>
  * <p>
+ * 当多个线程访问同一个HashMap实例，其中有人正在进行遍历操作，同时另一个人进行
+ * 结构性的更改（同一个线程也有可能引起），这样遍历的那个人就会收到
+ * ConcurrentModificationException(遍历的那个人自己调用remove方法并不会)。
+ * 这就是所谓的快速失败（fail-fast），当抛出ConcurrentModificationException
+ * 的时候，就会立即清理现场，以免以后发生什么不可意料的意外。
  * <p>The iterators returned by all of this class's "collection view methods"
  * are <i>fail-fast</i>: if the map is structurally modified at any time after
  * the iterator is created, in any way except through the iterator's own
@@ -95,6 +121,8 @@ import java.io.*;
  * arbitrary, non-deterministic behavior at an undetermined time in the
  * future.
  * <p>
+ * 注意：快速失败并不能保证总是发生，它只是尽力保证自己能起到作用，所以它只能
+ * 运用于查找bug的时候
  * <p>Note that the fail-fast behavior of an iterator cannot be guaranteed
  * as it is, generally speaking, impossible to make any hard guarantees in the
  * presence of unsynchronized concurrent modification.  Fail-fast iterators
@@ -174,6 +202,7 @@ public class HashMap<K, V>
     final float loadFactor;
 
     /**
+     * HashMap结构化更改的次数，这个参数跟快速失败的实现原理有关
      * The number of times this HashMap has been structurally modified
      * Structural modifications are those that change the number of mappings in
      * the HashMap or otherwise modify its internal structure (e.g.,
@@ -353,6 +382,9 @@ public class HashMap<K, V>
     }
 
     /**
+     * 检索对象的hashCode并进行改造生成新的hashCode，新的hashCode质量更高。因为
+     * HashMap使用2的n次方长度的哈希表，这个方法为防止hashCode冲突起着关键作用。
+     * 注意：空key通常映射到hash 0
      * Retrieve object hash code and applies a supplemental hash function to the
      * result hash, which defends against poor quality hash functions.  This is
      * critical because HashMap uses power-of-two length hash tables, that
