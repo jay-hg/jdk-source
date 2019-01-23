@@ -37,10 +37,13 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
+ * String表示字符串，所有的字符串如"abc"都是这个类的一个实例
  * The <code>String</code> class represents character strings. All
  * string literals in Java programs, such as <code>"abc"</code>, are
  * implemented as instances of this class.
  * <p>
+ * 字符串创建后就不会改变，String buffers支持可变的字符串。由于字符串不可变，
+ * 所以字符串的实例是可以共享的
  * Strings are constant; their values cannot be changed after they
  * are created. String buffers support mutable strings.
  * Because String objects are immutable they can be shared. For example:
@@ -61,6 +64,7 @@ import java.util.regex.PatternSyntaxException;
  *     String d = cde.substring(1, 2);
  * </pre></blockquote>
  * <p>
+ * String类包含了一系列方法，如检查字符、搜索字符、比较字符串等等
  * The class <code>String</code> includes methods for examining
  * individual characters of the sequence, for comparing strings, for
  * searching strings, for extracting substrings, and for creating a
@@ -79,10 +83,11 @@ import java.util.regex.PatternSyntaxException;
  * string concatenation and conversion, see Gosling, Joy, and Steele,
  * <i>The Java Language Specification</i>.
  *
+ * 除非特别指出，否则传空值给String的构造函数将会抛出空指针异常
  * <p> Unless otherwise noted, passing a <tt>null</tt> argument to a constructor
  * or method in this class will cause a {@link NullPointerException} to be
  * thrown.
- *
+ * 这段大意：字符串每个最小单元表示一个字符，即两个字节，字符串即是UTF-16的串
  * <p>A <code>String</code> represents a string in the UTF-16 format
  * in which <em>supplementary characters</em> are represented by <em>surrogate
  * pairs</em> (see the section <a href="Character.html#unicode">Unicode
@@ -117,6 +122,8 @@ public final class String
     private static final long serialVersionUID = -6849794470754667710L;
 
     /**
+     * Serialization Stream协议里特别指定了String的格式，一个字符串实例通过以下
+     * 格式输出到ObjectOutputStream中
      * Class String is special cased within the Serialization Stream Protocol.
      *
      * A String instance is written initially into an ObjectOutputStream in the
@@ -132,6 +139,7 @@ public final class String
             new ObjectStreamField[0];
 
     /**
+     * 字符串是不可变的，无须使用此构造函数
      * Initializes a newly created {@code String} object so that it represents
      * an empty character sequence.  Note that use of this constructor is
      * unnecessary since Strings are immutable.
@@ -141,6 +149,7 @@ public final class String
     }
 
     /**
+     * 无须使用
      * Initializes a newly created {@code String} object so that it represents
      * the same sequence of characters as the argument; in other words, the
      * newly created string is a copy of the argument string. Unless an
@@ -156,6 +165,7 @@ public final class String
     }
 
     /**
+     * 字符串实例是copy生成的，改变原先的字符数组不会影响到字符串
      * Allocates a new {@code String} so that it represents the sequence of
      * characters currently contained in the character array argument. The
      * contents of the character array are copied; subsequent modification of
@@ -203,6 +213,7 @@ public final class String
         this.value = Arrays.copyOfRange(value, offset, offset+count);
     }
 
+    //待续
     /**
      * Allocates a new {@code String} that contains characters from a subarray
      * of the <a href="Character.html#unicode">Unicode code point</a> array
@@ -1221,6 +1232,7 @@ public final class String
     }
 
     /**
+     * 比较两个字符串是否局部相同,toffset和ooffset分别表示this offset和other offset
      * Tests if two string regions are equal.
      * <p>
      * A substring of this <tt>String</tt> object is compared to a substring
