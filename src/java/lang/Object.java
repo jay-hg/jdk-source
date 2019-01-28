@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1994, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1994, 2010, Oracle and/or its affiliates（附属企业）. All rights reserved（预订的; 矜持的; 储藏着的;保留[储备]某物）.
  * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
  *
@@ -26,10 +26,10 @@
 package java.lang;
 
 /**
- * Class {@code Object} is the root of the class hierarchy.
+ * Class {@code Object} is the root of the class hierarchy（[?ha??rɑ:rki]等级制度）.
  * Every class has {@code Object} as a superclass. All objects,
  * including arrays, implement the methods of this class.
- *
+ * Object是整棵类树的根，所有类都是它的子类、实现它的方法。
  * @author  unascribed
  * @see     java.lang.Class
  * @since   JDK1.0
@@ -45,12 +45,14 @@ public class Object {
      * Returns the runtime class of this {@code Object}. The returned
      * {@code Class} object is the object that is locked by {@code
      * static synchronized} methods of the represented class.
+     *  返回运行时的类（阿猫阿狗），返回的东西是锁定的对象，表示类的
+     *  静态同步方法？？？
      *
      * <p><b>The actual result type is {@code Class<? extends |X|>}
      * where {@code |X|} is the erasure of the static type of the
      * expression on which {@code getClass} is called.</b> For
      * example, no cast is required in this code fragment:</p>
-     *
+     *  知道实际返回的类型是阿猫阿狗就好了
      * <p>
      * {@code Number n = 0;                             }<br>
      * {@code Class<? extends Number> c = n.getClass(); }
@@ -67,8 +69,10 @@ public class Object {
      * Returns a hash code value for the object. This method is
      * supported for the benefit of hash tables such as those provided by
      * {@link java.util.HashMap}.
+     *  返回对象的哈希值，为了给HashMap之类的东西使用，而在老祖宗这里开了这么一个方法
      * <p>
      * The general contract of {@code hashCode} is:
+     *  hashCode应满足以下约定
      * <ul>
      * <li>Whenever it is invoked on the same object more than once during
      *     an execution of a Java application, the {@code hashCode} method
@@ -76,15 +80,20 @@ public class Object {
      *     used in {@code equals} comparisons on the object is modified.
      *     This integer need not remain consistent from one execution of an
      *     application to another execution of the same application.
+     *     同一个程序里边同一个对象前后应该返回同一个hashCode
+     *
      * <li>If two objects are equal according to the {@code equals(Object)}
      *     method, then calling the {@code hashCode} method on each of
      *     the two objects must produce the same integer result.
+     *     如果两个对象equals，其hashCode也相等
+     *
      * <li>It is <em>not</em> required that if two objects are unequal
      *     according to the {@link java.lang.Object#equals(java.lang.Object)}
      *     method, then calling the {@code hashCode} method on each of the
      *     two objects must produce distinct integer results.  However, the
      *     programmer should be aware that producing distinct integer results
      *     for unequal objects may improve the performance of hash tables.
+     *     反之不然，但是使用的时候要注意
      * </ul>
      * <p>
      * As much as is reasonably practical, the hashCode method defined by
@@ -102,9 +111,11 @@ public class Object {
 
     /**
      * Indicates whether some other object is "equal to" this one.
+     *  指出两个对象是否相等
      * <p>
      * The {@code equals} method implements an equivalence relation
      * on non-null object references:
+     *  所有非空对象应该满足以下关系
      * <ul>
      * <li>It is <i>reflexive</i>: for any non-null reference value
      *     {@code x}, {@code x.equals(x)} should return
@@ -113,17 +124,20 @@ public class Object {
      *     {@code x} and {@code y}, {@code x.equals(y)}
      *     should return {@code true} if and only if
      *     {@code y.equals(x)} returns {@code true}.
+     *     反射性：若x==y,则y==x
      * <li>It is <i>transitive</i>: for any non-null reference values
      *     {@code x}, {@code y}, and {@code z}, if
      *     {@code x.equals(y)} returns {@code true} and
      *     {@code y.equals(z)} returns {@code true}, then
      *     {@code x.equals(z)} should return {@code true}.
+     *     传递性：若x==y,y==z,则x==z
      * <li>It is <i>consistent</i>: for any non-null reference values
      *     {@code x} and {@code y}, multiple invocations of
      *     {@code x.equals(y)} consistently return {@code true}
      *     or consistently return {@code false}, provided no
      *     information used in {@code equals} comparisons on the
      *     objects is modified.
+     *     持久（永恒）性：不改变对象的前提下，x==y则x永远==y
      * <li>For any non-null reference value {@code x},
      *     {@code x.equals(null)} should return {@code false}.
      * </ul>
@@ -139,6 +153,7 @@ public class Object {
      * method whenever this method is overridden, so as to maintain the
      * general contract for the {@code hashCode} method, which states
      * that equal objects must have equal hash codes.
+     * 若要重写此方法，也必须重写hashCode方法
      *
      * @param   obj   the reference object with which to compare.
      * @return  {@code true} if this object is the same as the obj
@@ -162,6 +177,7 @@ public class Object {
      * <pre>
      * x.clone().getClass() == x.getClass()</pre></blockquote>
      * will be {@code true}, but these are not absolute requirements.
+     * 生成一个复制对象，x.clone != x而x.clone.getClass == x.getClass，但是这不绝对
      * While it is typically the case that:
      * <blockquote>
      * <pre>
@@ -183,6 +199,8 @@ public class Object {
      * primitive fields or references to immutable objects, then it is usually
      * the case that no fields in the object returned by {@code super.clone}
      * need to be modified.
+     * 深拷贝，连阿猫的猫盆也会拷贝，如果阿猫的一切都是共享的，阿猫.clone==阿猫，
+     * 这就是特殊情况
      * <p>
      * The method {@code clone} for class {@code Object} performs a
      * specific cloning operation. First, if the class of this object does
@@ -196,11 +214,15 @@ public class Object {
      * the corresponding fields of this object, as if by assignment; the
      * contents of the fields are not themselves cloned. Thus, this method
      * performs a "shallow copy" of this object, not a "deep copy" operation.
+     * 如果一个类不实现Cloneable，调用clone时会抛异常。任何数组都实现了Cloneable接口
+     * 复制有深复制和浅复制之分，具体体现在（阿猫有一个猫盆，复制阿猫二号，二号有没有自己
+     * 的猫盆）
      * <p>
      * The class {@code Object} does not itself implement the interface
      * {@code Cloneable}, so calling the {@code clone} method on an object
      * whose class is {@code Object} will result in throwing an
      * exception at run time.
+     * Object类默认没有实现Cloneable接口，所以默认情况下调用clone会抛异常
      *
      * @return     a clone of this instance.
      * @exception  CloneNotSupportedException  if the object's class does not
@@ -243,6 +265,7 @@ public class Object {
      * is chosen to be awakened. The choice is arbitrary and occurs at
      * the discretion of the implementation. A thread waits on an object's
      * monitor by calling one of the {@code wait} methods.
+     * 唤醒一个正在等待这个对象的线程
      * <p>
      * The awakened thread will not be able to proceed until the current
      * thread relinquishes the lock on this object. The awakened thread will
@@ -254,6 +277,7 @@ public class Object {
      * This method should only be called by a thread that is the owner
      * of this object's monitor. A thread becomes the owner of the
      * object's monitor in one of three ways:
+     * 只有一个线程成为该对象的监护人？，此方法才会被调用。线程成为监护人的方法：
      * <ul>
      * <li>By executing a synchronized instance method of that object.
      * <li>By executing the body of a {@code synchronized} statement
@@ -282,6 +306,7 @@ public class Object {
      * be actively competing to synchronize on this object; for example,
      * the awakened threads enjoy no reliable privilege or disadvantage in
      * being the next thread to lock this object.
+     * 喊醒一帮线程来抢这个对象的锁，舍己为人
      * <p>
      * This method should only be called by a thread that is the owner
      * of this object's monitor. See the {@code notify} method for a
