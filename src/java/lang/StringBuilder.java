@@ -27,14 +27,18 @@ package java.lang;
 
 
 /**
+ * 可变的字符序列，它和StringBuffer提供一样兼容的api，但是它不保证同步。
+ * 当只有一个线程的情况下最好不要使用StringBuffer，而应该使用此类。
+ * 大部分情况下此类的性能比StringBuffer要好，推荐使用。
  * A mutable sequence of characters.  This class provides an API compatible
  * with <code>StringBuffer</code>, but with no guarantee of synchronization.
- * This class is designed for use as a drop-in replacement for
+ * This class is designed for use as a drop-in（不速之客） replacement for
  * <code>StringBuffer</code> in places where the string buffer was being
  * used by a single thread (as is generally the case).   Where possible,
  * it is recommended that this class be used in preference to
  * <code>StringBuffer</code> as it will be faster under most implementations.
  *
+ * 啦啦啦，主要讲append和insert两种方法
  * <p>The principal operations on a <code>StringBuilder</code> are the
  * <code>append</code> and <code>insert</code> methods, which are
  * overloaded so as to accept data of any type. Each effectively
@@ -55,11 +59,13 @@ package java.lang;
  * then <code>sb.append(x)</code> has the same effect as
  * <code>sb.insert(sb.length(),&nbsp;x)</code>.
  *
+ * 这个东西是有容量的，当篮子被填满的时候，它会自动扩容。
  * Every string builder has a capacity. As long as the length of the
  * character sequence contained in the string builder does not exceed
  * the capacity, it is not necessary to allocate a new internal
  * buffer. If the internal buffer overflows, it is automatically made larger.
  *
+ * 这个类的实例不支持多线程，多线程的情况应该使用StringBuffer。
  * <p>Instances of <code>StringBuilder</code> are not safe for
  * use by multiple threads. If such synchronization is required then it is
  * recommended that {@link java.lang.StringBuffer} be used.
@@ -390,6 +396,7 @@ public final class StringBuilder
     /**
      * @throws NullPointerException {@inheritDoc}
      */
+    //TODO:看看算法实现
     public int lastIndexOf(String str, int fromIndex) {
         return String.lastIndexOf(value, 0, count,
                               str.toCharArray(), 0, str.length(), fromIndex);
@@ -416,6 +423,7 @@ public final class StringBuilder
      *             characters currently stored in the string builder, in which
      *             case extra characters are ignored.
      */
+    //TODO:看过流之后再来看懂
     private void writeObject(java.io.ObjectOutputStream s)
         throws java.io.IOException {
         s.defaultWriteObject();

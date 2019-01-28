@@ -30,6 +30,7 @@ import sun.misc.FloatingDecimal;
 import java.util.Arrays;
 
 /**
+ * 一个可变的字符序列。实现一个可变的字符串
  * A mutable sequence of characters.
  * <p>
  * Implements a modifiable string. At any point in time it contains some
