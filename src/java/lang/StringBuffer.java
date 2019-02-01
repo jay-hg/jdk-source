@@ -27,18 +27,23 @@ package java.lang;
 
 
 /**
+ * 线程安全的，可变的字符串序列。StringBuffer就像一个特殊的String,区别是它
+ * 可以改变字符串的内容。
  * A thread-safe, mutable sequence of characters.
  * A string buffer is like a {@link String}, but can be modified. At any
  * point in time it contains some particular sequence of characters, but
  * the length and content of the sequence can be changed through certain
  * method calls.
  * <p>
+ * StringBuffer 支持多线程同步，当多个线程对同一个StringBuffer实例进行操作时，
+ * 总是有序的，对于每个线程来说就像只有他们自己在操作这个实例一样。
  * String buffers are safe for use by multiple threads. The methods
  * are synchronized where necessary so that all the operations on any
  * particular instance behave as if they occur in some serial order
  * that is consistent with the order of the method calls made by each of
  * the individual threads involved.
  * <p>
+ * 啦啦啦，append和insert是非常基本的方法
  * The principal operations on a <code>StringBuffer</code> are the
  * <code>append</code> and <code>insert</code> methods, which are
  * overloaded so as to accept data of any type. Each effectively
@@ -59,16 +64,21 @@ package java.lang;
  * then <code>sb.append(x)</code> has the same effect as
  * <code>sb.insert(sb.length(),&nbsp;x)</code>.
  * <p>
+ * 每当涉及到append、insert等源序列的操作，它们将作用在缓冲区上，而不是直接
+ * 作用在源序列上。
  * Whenever an operation occurs involving a source sequence (such as
  * appending or inserting from a source sequence) this class synchronizes
  * only on the string buffer performing the operation, not on the source.
  * <p>
+ * 它有容量且必要时可自动扩容。
  * Every string buffer has a capacity. As long as the length of the
  * character sequence contained in the string buffer does not exceed
  * the capacity, it is not necessary to allocate a new internal
  * buffer array. If the internal buffer overflows, it is
  * automatically made larger.
  *
+ * 此类在JDK5之后加入java的阵营中，和StringBuilder相比，它的优势是线程安全，而
+ * 在单个线程的情况下，StringBuilder性能更佳。
  * As of  release JDK 5, this class has been supplemented with an equivalent
  * class designed for use by a single thread, {@link StringBuilder}.  The
  * <tt>StringBuilder</tt> class should generally be used in preference to

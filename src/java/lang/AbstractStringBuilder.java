@@ -135,6 +135,8 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
     }
 
     /**
+     * 尝试缩小容量，以提高空间利用率。如果实际所需远小于现有容量，那么此操作
+     * 就很有意义了。
      * Attempts to reduce storage used for the character sequence.
      * If the buffer is larger than necessary to hold its current sequence of
      * characters, then it may be resized to become more space efficient.
@@ -320,6 +322,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
     }
 
     /**
+     * 复制指定的字符序列到指定地点
      * Characters are copied from this sequence into the
      * destination character array <code>dst</code>. The first character to
      * be copied is at index <code>srcBegin</code>; the last character to
